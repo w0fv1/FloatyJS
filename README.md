@@ -25,7 +25,7 @@ FloatyJS 是一个轻量级且可定制的悬浮按钮和窗口组件，基于 [
 
 ## 演示
 
-查看在线演示 [这里](https://example.com/demo)。
+查看在线演示 [这里(注意右下角按钮)](https://w0fv1.github.io/FloatyJS)。
 
 ## 安装
 
@@ -44,7 +44,7 @@ FloatyJS 是一个轻量级且可定制的悬浮按钮和窗口组件，基于 [
     <!-- FloatyJS 脚本 -->
     <script
         type="module"
-        src="https://cdn.jsdelivr.net/gh/your-repo/floatyjs@latest/floatyjs.js"
+        src="https://w0fv1.github.io/FloatyJS/floaty.js"
         data-theme-color="#ff5722"
         data-floaty-button-text="💬"
         data-window-width="600px"
@@ -72,7 +72,7 @@ FloatyJS 是一个轻量级且可定制的悬浮按钮和窗口组件，基于 [
 ```html
 <script
     type="module"
-    src="https://cdn.jsdelivr.net/gh/your-repo/floatyjs@latest/floatyjs.js"
+    src="https://w0fv1.github.io/FloatyJS/floaty.js"
     data-theme-color="#ff5722"
     data-floaty-button-text="💬"
     data-window-width="600px"
@@ -150,7 +150,7 @@ MIT 许可证
 
 ---
 
-*欢迎通过访问 [GitHub 仓库](https://github.com/your-repo/floatyjs) 贡献代码、报告问题或提出功能建议。*
+*欢迎通过访问 [GitHub 仓库](https://github.com/w0fv1/FloatyJS) 贡献代码、报告问题或提出功能建议。*
 
 
 [banner]:
