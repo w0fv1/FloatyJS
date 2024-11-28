@@ -26,11 +26,12 @@ function getConfig(key, defaultVal) {
     return defaultVal;
 }
 
-// 定义悬浮按钮组件
 class FloatyButton extends LitElement {
     static properties = {
         themeColor: { type: String, attribute: "theme-color" },
         buttonText: { type: String, attribute: "button-text" },
+        tooltipText: { type: String, attribute: "tooltip-text" }, // 新增提示内容属性
+        isTooltipVisible: { type: Boolean, state: true }, // 控制提示显示的内部状态
     };
 
     static styles = css`
@@ -40,10 +41,16 @@ class FloatyButton extends LitElement {
             --active-filter: brightness(0.90); /* 按下时的亮度调整 */
         }
 
-        button {
+        .container {
             position: fixed;
             bottom: 20px;
             right: 20px;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        button {
             padding: 10px 15px;
             background-color: var(--main-color);
             color: #fff;
@@ -51,7 +58,6 @@ class FloatyButton extends LitElement {
             border-radius: 50px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             cursor: pointer;
-            z-index: 1000;
             font-size: 14px;
             transition: background-color 0.3s ease, transform 0.1s ease, filter 0.3s ease;
         }
@@ -65,12 +71,36 @@ class FloatyButton extends LitElement {
             transform: scale(0.95);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
+
+        .tooltip {
+            position: absolute;
+            bottom: 50%; /* 垂直居中 */
+            right: 100%; /* 放置在按钮左边 */
+            transform: translateY(50%); /* 精确垂直对齐 */
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+            margin-right: 10px; /* 按钮与提示之间的距离 */
+            pointer-events: none; /* 使提示不影响鼠标事件 */
+        }
+
+        .tooltip.visible {
+            opacity: 1;
+        }
     `;
 
     constructor() {
         super();
         this.themeColor = "#000000"; // 默认颜色
         this.buttonText = "💬"; // 默认按钮文本
+        this.tooltipText = "点击这里打开悬浮窗口"; // 默认提示内容
+        this.isTooltipVisible = false; // 提示初始为隐藏
     }
 
     updated(changedProperties) {
@@ -81,11 +111,37 @@ class FloatyButton extends LitElement {
 
     handleClick() {
         console.log("按钮被点击了！");
+        this.hideTooltip(); // 点击按钮时切换提示显示状态
         // 可以在这里添加其他内部逻辑
     }
 
+    // 显示提示
+    showTooltip() {
+        this.isTooltipVisible = true;
+        return this.isTooltipVisible;
+    }
+
+    // 隐藏提示
+    hideTooltip() {
+        this.isTooltipVisible = false;
+        return this.isTooltipVisible;
+    }
+
+    // 切换提示显示状态
+    toggleTooltip() {
+        this.isTooltipVisible = !this.isTooltipVisible;
+        return this.isTooltipVisible;
+    }
+
     render() {
-        return html`<button @click=${this.handleClick}>${this.buttonText}</button>`;
+        return html`
+            <div class="container">
+                <div class="tooltip ${this.isTooltipVisible ? "visible" : ""}">
+                    ${this.tooltipText}
+                </div>
+                <button @click=${this.handleClick}>${this.buttonText}</button>
+            </div>
+        `;
     }
 }
 
@@ -94,6 +150,7 @@ class FloatyWindow extends LitElement {
     static properties = {
         width: { type: String },
         height: { type: String },
+        title: { type: String },
         visible: { type: Boolean, reflect: true },
         targetLink: { type: String, attribute: "target-link" },
     };
@@ -169,9 +226,9 @@ class FloatyWindow extends LitElement {
 
     render() {
         return html`
-                <div class="window-content" style="width: ${this.width}; height: ${this.height};">
-                    <iframe src="${this.targetLink}" ></iframe>
-                </div>
+            <div class="window-content" style="width: ${this.width}; height: ${this.height};">
+                <iframe src="${this.targetLink}" ></iframe>
+            </div>
         `;
     }
 }
@@ -191,9 +248,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // 创建 FloatyButton
     const floatyButton = document.createElement("floaty-button");
     floatyButton.themeColor = getConfig("theme-color", "#000000");
-    floatyButton.buttonText = getConfig("floaty-button-text", "💬");
+    floatyButton.buttonText = getConfig("button-text", "💬");
+    floatyButton.tooltipText = getConfig(
+        "tooltip-text",
+        "点击这里打开悬浮窗口",
+    );
     document.body.appendChild(floatyButton);
-
+    floatyButton.showTooltip();
+    setTimeout(() => {
+        floatyButton.hideTooltip();
+    }, 2000);
     // 添加点击事件监听器，控制 FloatyWindow 的显示和隐藏
     floatyButton.addEventListener("click", () => {
         floatyWindow.visible = !floatyWindow.visible;
@@ -209,6 +273,9 @@ document.addEventListener("DOMContentLoaded", () => {
             floatyWindow.sendMessage(message);
         }
     });
+    // 将 floatyButton 暴露到全局
+    window.floatyButton = floatyButton;
+    window.floatyWindow = floatyWindow;
 });
 
 // // 监听来自 iframe 的消息
