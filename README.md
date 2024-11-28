@@ -55,6 +55,7 @@ FloatyJS 是一个轻量级且可定制的悬浮按钮和窗口组件，基于
             data-window-height="500px"
             data-window-title="FloatyJS"
             data-target-link="https://your-iframe-content.com"
+            defer
         ></script>
     </body>
 </html>
@@ -88,6 +89,7 @@ FloatyJS 是一个轻量级且可定制的悬浮按钮和窗口组件，基于
             data-window-height="500px"
             data-window-title="FloatyJS"
             data-target-link="https://your-iframe-content.com"
+            defer
         ></script>
 ```
 
