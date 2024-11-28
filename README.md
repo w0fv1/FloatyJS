@@ -67,7 +67,7 @@ FloatyJS 是一个轻量级且可定制的悬浮按钮和窗口组件，基于
 通过在 `<script>` 标签上添加 `data-` 属性来自定义 FloatyJS：
 
 - **`data-theme-color`**：设置悬浮按钮的主色调。_(默认值：`#000000`)_
-- **`data-button-text`**：设置悬浮按钮上显示的文本或表情符号。_(默认值：`🔍`)_
+- **`data-button-text`**：设置悬浮按钮上显示的文本或表情符号。_(默认值：`💬`)_
 - **`data-tooltip-text`**: 设置悬浮按钮的提示文本。_(默认值：`点击这里可以打开悬浮窗`)_
 - **`data-window-title`**：设置悬浮窗口的标题。_(默认值：`FloatyJS`)_
 - **`data-window-theme-color`**：设置悬浮窗口的背景颜色。_(默认值：`#ffffff`)_
@@ -78,16 +78,17 @@ FloatyJS 是一个轻量级且可定制的悬浮按钮和窗口组件，基于
 示例：
 
 ```html
-<script
-    type="module"
-    src="https://w0fv1.github.io/FloatyJS/floaty.js"
-    data-theme-color="#ff5722"
-    data-tooltip-text="点击这里可以打开悬浮窗"
-    data-window-width="600px"
-    data-window-height="500px"
-    data-window-title="FloatyJS"
-    data-target-link="https://your-iframe-content.com"
-></script>
+    <script
+            type="module"
+            src="https://w0fv1.github.io/FloatyJS/floaty.js"
+            data-theme-color="#ff5722"
+            data-button-text="💬"
+            data-tooltip-text="点击打开悬浮窗口"
+            data-window-width="600px"
+            data-window-height="500px"
+            data-window-title="FloatyJS"
+            data-target-link="https://your-iframe-content.com"
+        ></script>
 ```
 
 ### 自定义
