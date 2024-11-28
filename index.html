@@ -7,46 +7,46 @@
     <title>FloatyJS 介绍</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
     <script type="module" src="./floaty.js" data-theme-color="#fff" data-button-text="💬"
-        data-tooltip-text="点击这里可以打开悬浮窗哦~" data-target-link="./iframe.html"
-        data-window-height="800px" data-window-width="1000px" data-window-title="FloatyJS Window"></script>
+        data-tooltip-text="点击这里可以打开悬浮窗哦~" data-target-link="./iframe.html" data-window-height="800px"
+        data-window-width="1000px" data-window-title="FloatyJS Window" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
 </head>
 
 <body>
-   <!-- 容器，用于渲染 Markdown 内容 -->
-   <div id="content" class="markdown-body"></div>
+    <!-- 容器，用于渲染 Markdown 内容 -->
+    <div id="content" class="markdown-body"></div>
 
-   <script>
-       document.addEventListener("DOMContentLoaded", () => {
-           // 初始化 markdown-it
-           const md = window.markdownit({
-               html: true,        // 允许 HTML 标签
-               linkify: true,     // 自动将 URL 转换为链接
-               typographer: true  // 启用一些美化功能
-           });
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // 初始化 markdown-it
+            const md = window.markdownit({
+                html: true,        // 允许 HTML 标签
+                linkify: true,     // 自动将 URL 转换为链接
+                typographer: true  // 启用一些美化功能
+            });
 
-           // 获取 README.md 内容
-           fetch('./README.md')
-               .then(response => {
-                   if (!response.ok) {
-                       throw new Error('无法获取 README.md 文件: ' + response.statusText);
-                   }
-                   return response.text();
-               })
-               .then(markdown => {
-                   // 将 Markdown 转换为 HTML
-                   const result = md.render(markdown);
-                   // 将结果插入到页面中
-                   const contentDiv = document.getElementById('content');
-                   contentDiv.innerHTML = result;
-               })
-               .catch(error => {
-                   console.error('获取或渲染 Markdown 时出错:', error);
-                   const contentDiv = document.getElementById('content');
-                   contentDiv.innerHTML = `<p style="color: red;">无法加载内容: ${error.message}</p>`;
-               });
-       });
-   </script>
+            // 获取 README.md 内容
+            fetch('./README.md')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('无法获取 README.md 文件: ' + response.statusText);
+                    }
+                    return response.text();
+                })
+                .then(markdown => {
+                    // 将 Markdown 转换为 HTML
+                    const result = md.render(markdown);
+                    // 将结果插入到页面中
+                    const contentDiv = document.getElementById('content');
+                    contentDiv.innerHTML = result;
+                })
+                .catch(error => {
+                    console.error('获取或渲染 Markdown 时出错:', error);
+                    const contentDiv = document.getElementById('content');
+                    contentDiv.innerHTML = `<p style="color: red;">无法加载内容: ${error.message}</p>`;
+                });
+        });
+    </script>
 </body>
 
 </html>
