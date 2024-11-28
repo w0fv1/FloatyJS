@@ -144,8 +144,6 @@ class FloatyButton extends LitElement {
         `;
     }
 }
-
-// 定义悬浮窗口组件
 class FloatyWindow extends LitElement {
     static properties = {
         width: { type: String },
@@ -170,6 +168,11 @@ class FloatyWindow extends LitElement {
             transition: opacity 0.3s ease, transform 0.3s ease;
             max-width: 88vw; /* 当页面宽度小于窗口宽度时，限制最大宽度 */
             max-height: 90vh; /* 同上，限制最大高度 */
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            width: var(--window-width, 500px); /* 使用 CSS 变量 */
+            height: var(--window-height, 400px); /* 使用 CSS 变量 */
         }
 
         :host([visible]) {
@@ -177,18 +180,58 @@ class FloatyWindow extends LitElement {
             transform: translateX(-50%) translateY(0);
             pointer-events: auto; /* 使可见时可以交互 */
         }
+
+        .toolbar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5em 1em;
+            border-bottom: 1px solid #ddd;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        .title {
+            font-size: 1em;
+            font-weight: bold;
+            color: #333;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: 0.5em;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .close-button:hover {
+            color: #000;
+        }
+
         .window-content {
-            max-height: 100%;
-            max-width: 100%;
+            flex: 1;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
         }
 
         iframe {
-            margin: 0;
-            padding: 0; /* 移除默认内边距，因为 iframe 会有自己的布局 */
-            border-radius: 8px;
-            border: none;
             width: 100%;
             height: 100%;
+            border: none;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
         }
     `;
 
@@ -198,6 +241,7 @@ class FloatyWindow extends LitElement {
         this.height = "400px"; // 默认高度
         this.visible = false;
         this.targetLink = "/index.html"; // 默认链接
+        this.title = "悬浮窗口"; // 默认标题
     }
 
     /**
@@ -224,14 +268,35 @@ class FloatyWindow extends LitElement {
         }
     }
 
+    /**
+     * 关闭窗口的方法
+     */
+    closeWindow() {
+        this.visible = false;
+    }
+
+    updated(changedProperties) {
+        if (changedProperties.has('width')) {
+            this.style.setProperty('--window-width', this.width);
+        }
+        if (changedProperties.has('height')) {
+            this.style.setProperty('--window-height', this.height);
+        }
+    }
+
     render() {
         return html`
-            <div class="window-content" style="width: ${this.width}; height: ${this.height};">
-                <iframe src="${this.targetLink}" ></iframe>
+            <div class="toolbar">
+                <div class="title">${this.title}</div>
+                <button class="close-button" @click="${this.closeWindow}" aria-label="关闭窗口">&times;</button>
+            </div>
+            <div class="window-content">
+                <iframe src="${this.targetLink}"></iframe>
             </div>
         `;
     }
 }
+
 
 customElements.define("floaty-button", FloatyButton);
 customElements.define("floaty-window", FloatyWindow);
@@ -243,6 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
     floatyWindow.width = getConfig("window-width", "400px");
     floatyWindow.height = getConfig("window-height", "300px");
     floatyWindow.targetLink = getConfig("target-link", "/");
+    floatyWindow.title = getConfig("window-title", "FloatyJS Window");
     document.body.appendChild(floatyWindow);
 
     // 创建 FloatyButton
